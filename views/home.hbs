@@ -1,5 +1,14 @@
 <h1>Graph</h1>
 
+<ol>
+    {{#each data}}
+    <li>
+        {{this.title}}
+    </li>
+    {{/each}}
+</ol>
+
+
 <!-- Load d3.js and the geo projection plugin -->
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
@@ -30,6 +39,10 @@ function ready(error, dataGeo, data) {
 
   // Create a color scale
   var allContinent = d3.map(data, function(d){return(d.homecontinent)}).keys()
+
+  // allcontinent: alle continenten
+  // d3.schemepaired: kleuren
+
   var color = d3.scaleOrdinal()
     .domain(allContinent)
     .range(d3.schemePaired);
