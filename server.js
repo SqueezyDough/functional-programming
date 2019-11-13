@@ -17,5 +17,6 @@ app
 		defaultLayout: "main",
 		partialsDir: __dirname + "/views/partials",
 		extname: ".hbs",}))
-    .use("/", routes)
+	.use("/", routes)
+	.use("/fetch", routes)
 	.listen(port, () => console.log(`App listening on port ${port}!`));

@@ -3,6 +3,23 @@ const utils = require("./utils.controller");
 
 const dataController = {};
 
+dataController.fetchData = function(req, res) {
+    const queryTypes = ["kleding"];
+
+    dataController.fetchTypes(queryTypes).then( (data) => {
+        let items = data.map (item => {
+            const obj = {
+                country : item.countryLabel.value,
+                amount : item.choCount.value,
+            }
+            return obj;
+        })
+
+        res.write(JSON.stringify(items) );
+        res.end();
+    })
+}
+
 dataController.fetchTypes = function(types) {
     const typesString = createTypeString(types);
 
@@ -16,28 +33,18 @@ dataController.fetchTypes = function(types) {
     PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
     PREFIX gn: <http://www.geonames.org/ontology#>
 
-    SELECT  ?title
-            ?mainCategory
-            ?countryLabel
-            ?lat
-            ?long
-            ?type
-
+    SELECT ?countryLabel
+           (COUNT(?cho) AS ?choCount)
     WHERE {
-      VALUES ?type {${typesString}}
+      <https://hdl.handle.net/20.500.11840/termmaster13527> skos:narrower* ?type .
+      ?cho edm:object ?type .
 
-      ?cho edm:isRelatedTo ?cat .
-      ?cho dc:type ?type .
-      ?cho dct:spatial ?place .
-
-      ?place skos:exactMatch/wgs84:lat ?lat .
-      ?place skos:exactMatch/wgs84:long ?long .
+      ?cho dct:spatial ?place . # obj place
       ?place skos:exactMatch/gn:parentCountry ?country .
-
-      ?cho dc:title ?title .
-      ?cat skos:prefLabel ?mainCategory .
       ?country gn:name ?countryLabel .
-    }
+
+    } GROUP BY ?country ?countryLabel
+    ORDER BY DESC(?choCount)
     `
 
     return runQuery(url, query)
