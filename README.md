@@ -6,6 +6,13 @@ The bubble chart supports all kinds of data as long it only contains a name and 
 Users can click on a pre-selected category and display method. The chart will update accordingly.
 
 ## Install
+### Clone repository
+```
+git clone https://github.com/SqueezyDough/functional-programming.git
+
+cd functional-programming
+```
+
 ### Install packages
 ```
 npm i
