@@ -1,22 +1,13 @@
-<h1>Graph</h1>
-
-<h1>D3 Bubble Chart (with Static Data)</h1>
+<h1>Kleding per land</h1>
 
 <section id="graph"></section>
 
-<p>Also, see the <a href="https://codepen.io/girliemac/pen/qFGtw">animated version of this chart</a>, using realtime data!</p>
-<p>Full source code is distributed under MIT license on <a href="https://github.com/pubnub/d3-bubble">Github</a>.</p>
-
-<p>Author: <a href="https://twitter.com/girlie_mac">@girlie_mac</a></p>
-
-<script src="https://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
 <script>
-
-let data = []
 let xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
-      data = JSON.parse(this.responseText);
+      let data = JSON.parse(this.responseText);
 
       drawGraph(data)
     }
@@ -24,52 +15,89 @@ xhr.onreadystatechange = function() {
 xhr.open("GET", `/fetch`, true);
 xhr.send();
 
-function drawGraph(json) {
 
-  // Fake JSON data
-  var json = {"countries_msg_vol": {
-    "CA": 170, "US": 100, "BB": 12, "CU": 9
-  }};
+function drawGraph(data) {
 
-	// D3 Bubble Chart
+  const dataset = {
+    children: data
+  };
 
-	var diameter = 600;
 
-	var svg = d3.select('#graph').append('svg')
-					.attr('width', diameter)
-					.attr('height', diameter);
+  console.log(dataset)
 
-	var bubble = d3.layout.pack()
-				.size([diameter, diameter])
-				.value(function(d) {return d.size;})
-         // .sort(function(a, b) {
-				// 	return -(a.value - b.value)
-				// })
-				.padding(3);
 
-  // generate data with calculated layout values
-  var nodes = bubble.nodes(processData(json))
-						.filter(function(d) { return !d.children; }); // filter out the outer bubble
+var diameter = 600;
+        var color = d3.scaleOrdinal(d3.schemeCategory20);
 
-  var vis = svg.selectAll('circle')
-					.data(nodes);
+        var bubble = d3.pack(dataset)
+            .size([diameter, diameter])
+            .padding(1.5);
 
-  vis.enter().append('circle')
-			.attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; })
-			.attr('r', function(d) { return d.r; })
-			.attr('class', function(d) { return d.className; });
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", diameter)
+            .attr("height", diameter)
+            .attr("class", "bubble");
 
-  function processData(data) {
-    var obj = data.countries_msg_vol;
+        var nodes = d3.hierarchy(dataset)
+            .sum(function(d) { return d.amount; });
 
-    var newDataSet = [];
+        var node = svg.selectAll(".node")
+            .data(bubble(nodes).descendants())
+            .enter()
+            .filter(function(d){
+                return  !d.children
+            })
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
 
-    for(var prop in obj) {
-      newDataSet.push({name: prop, className: prop.toLowerCase(), size: obj[prop]});
-    }
-    return {children: newDataSet};
-  }
+        node.append("title")
+            .text(function(d) {
+                return d.Name + ": " + d.amount;
+            });
+
+        node.append("circle")
+            .attr("r", function(d) {
+                return d.r;
+            })
+            .style("fill", function(d,i) {
+                return color(i);
+            });
+
+        node.append("text")
+            .attr("dy", ".2em")
+            .style("text-anchor", "middle")
+            .text(function(d) {
+                return d.data.Name.substring(0, d.r / 3);
+            })
+            .attr("font-family", "sans-serif")
+            .attr("font-size", function(d){
+                return d.r/5;
+            })
+            .attr("fill", "white");
+
+        node.append("text")
+            .attr("dy", "1.3em")
+            .style("text-anchor", "middle")
+            .text(function(d) {
+                return d.data.amount;
+            })
+            .attr("font-family",  "Gill Sans", "Gill Sans MT")
+            .attr("font-size", function(d){
+                return d.r/5;
+            })
+            .attr("fill", "white");
+
+        d3.select(self.frameElement)
+            .style("height", diameter + "px");
+
+
+
 
 }
+
 
 </script>

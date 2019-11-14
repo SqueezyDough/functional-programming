@@ -9,8 +9,8 @@ dataController.fetchData = function(req, res) {
     dataController.fetchTypes(queryTypes).then( (data) => {
         let items = data.map (item => {
             const obj = {
-                country : item.countryLabel.value,
-                amount : item.choCount.value,
+                Name : item.countryLabel.value,
+                amount : parseInt(item.choCount.value),
             }
             return obj;
         })
@@ -21,8 +21,6 @@ dataController.fetchData = function(req, res) {
 }
 
 dataController.fetchTypes = function(types) {
-    const typesString = createTypeString(types);
-
     const url ="https://api.data.netwerkdigitaalerfgoed.nl/datasets/ivo/NMVW/services/NMVW-34/sparql"
 
     const query = `
@@ -56,20 +54,6 @@ function runQuery(url, query) {
     .then(json => {
         return json.results.bindings;
     })
-}
-
-function createTypeString(types) {
-    let string = "";
-
-    types.forEach( type => {
-        type = type.toLowerCase();
-
-        string = string
-               + `'${type}'`
-               + `'${utils.capitaliseFirstCharacter(type)}'`
-    });
-
-    return string;
 }
 
 module.exports = dataController;
