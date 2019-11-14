@@ -1,6 +1,7 @@
 body {
   display: flex;
   flex-direction: column;
+  width: 100%;
   font-family: "Segoe UI", sans-serif;
   margin: 1em;
   background: #393939;
@@ -17,5 +18,5 @@ h1 {
 }
 
 svg {
-  margin-top: 5rem;
+  align-self: center;
 }

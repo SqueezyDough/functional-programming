@@ -1,17 +1,21 @@
 const fetch = require("node-fetch");
-const utils = require("./utils.controller");
+const utils = require("./utils.controller")
 
 const dataController = {};
 
 dataController.fetchData = function(req, res) {
-    const queryTypes = ["kleding"];
-
-    dataController.fetchTypes(queryTypes).then( (data) => {
+    getDataSet().then( (data) => {
         let items = data.map (item => {
-            const obj = {
-                Name : item.countryLabel.value,
-                amount : parseInt(item.choCount.value),
-            }
+            let obj = {}
+            Object.entries(item)
+                .forEach(([key, propValue]) => {
+                    if (utils.isStringANumber(propValue.value)) {
+                        obj.Amount = propValue.value
+                    } else {
+                        obj.Name = propValue.value
+                    }
+            })
+
             return obj;
         })
 
@@ -20,7 +24,7 @@ dataController.fetchData = function(req, res) {
     })
 }
 
-dataController.fetchTypes = function(types) {
+function getDataSet () {
     const url ="https://api.data.netwerkdigitaalerfgoed.nl/datasets/ivo/NMVW/services/NMVW-34/sparql"
 
     const query = `
