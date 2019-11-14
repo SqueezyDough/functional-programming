@@ -20,6 +20,7 @@ Here you can see the app as it is today! It displays all clothing per country.
 I request data from the [National museum of world cultures](http://collectie.wereldculturen.nl/#/query/5de27531-1d92-4ca6-af75-f3d88e5a0f73). I only need to count the amount of types in a specific country.
 
 * Place
+* Long/lat
 * Country
 * Type
 
