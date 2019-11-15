@@ -6,6 +6,8 @@ const dataController = {};
 dataController.fetchData = function(req, res) {
     getDataSet().then( (data) => {
         let items = data.map (item => {
+            // edited function from https://beta.vizhub.com/Razpudding/2e039bf6e39a421180741285a8f735a3?edit=files&file=index.js
+
             let obj = {}
             Object.entries(item)
                 .forEach(([key, propValue]) => {
@@ -17,12 +19,16 @@ dataController.fetchData = function(req, res) {
             })
 
             return obj;
+
+            // end edit
         })
 
         res.write(JSON.stringify(items) );
         res.end();
     })
 }
+
+//maskers: https://hdl.handle.net/20.500.11840/termmaster13435
 
 function getDataSet () {
     const url ="https://api.data.netwerkdigitaalerfgoed.nl/datasets/ivo/NMVW/services/NMVW-34/sparql"
