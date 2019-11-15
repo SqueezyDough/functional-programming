@@ -34,19 +34,24 @@ function drawChart(data) {
 	let diameter = 650;
 	let color = d3.scaleOrdinal(d3.schemeCategory20);
 
+	// set circular d3 layout
 	let bubble = d3.pack(dataset)
 				   .size([diameter, diameter])
 				   .padding(2.5);
 
+	// select the body and add the svg element with its size
 	let svg = d3.select("body")
 				.append("svg")
 				.attr("width", diameter)
 				.attr("height", diameter)
 				.attr("class", "bubble");
 
+
+	// create a node hierarchy
 	let nodes = d3.hierarchy(dataset)
 				  .sum(function(d) { return d.Amount; });
 
+	// Add the nodes
 	let node = svg.selectAll(".node")
 					.data(bubble(nodes).descendants())
 					.enter()
@@ -59,11 +64,13 @@ function drawChart(data) {
 						return "translate(" + d.x + "," + d.y + ")";
 					});
 
+	// Add titles
 	node.append("title")
 		.text(function(d) {
 			return d.Name + ": " + d.Amount;
 		});
 
+	// draw thhe bubbles withh the radius and color
 	node.append("circle")
 		.attr("r", function(d) {
 			return d.r;
@@ -72,6 +79,7 @@ function drawChart(data) {
 			return color(i);
 		});
 
+	// style titles
 	node.append("text")
 		.attr("dy", ".2em")
 		.style("text-anchor", "middle")

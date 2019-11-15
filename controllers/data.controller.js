@@ -3,6 +3,7 @@ const utils = require("./utils.controller")
 
 const dataController = {};
 
+// fetch the data for the diagram
 dataController.fetchData = function(req, res) {
     //maskers: termmaster13435
     //foto's: termmaster1397
@@ -34,6 +35,7 @@ dataController.fetchData = function(req, res) {
     })
 }
 
+// definne query and get data
 function getDataSet (uri) {
     const url ="https://api.data.netwerkdigitaalerfgoed.nl/datasets/ivo/NMVW/services/NMVW-34/sparql";
 
@@ -64,6 +66,7 @@ function getDataSet (uri) {
     return runQuery(url, query);
 }
 
+// run the query
 function runQuery(url, query) {
     return fetch(url+"?query="+ encodeURIComponent(query) +"&format=json")
     .then(res => res.json())
