@@ -4,7 +4,7 @@ const utils = require("./utils.controller")
 const dataController = {};
 
 // fetch the data for the diagram
-dataController.fetchData = function(req, res) {
+dataController.cleanData = function(req, res) {
     //maskers: termmaster13435
     //foto's: termmaster1397
     //kleding: termmaster13527
