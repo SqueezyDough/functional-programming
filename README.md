@@ -41,3 +41,9 @@ npm i
 ``` 
 npm run dev
 ```
+
+## acknowledgement
+* Marc - helped me with d3 example
+* Stefan - helped me with d3 experiment
+* Thijs - helped me out with some functions
+* Ivo - helped me with sparql
