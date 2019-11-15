@@ -4,7 +4,13 @@ const utils = require("./utils.controller")
 const dataController = {};
 
 dataController.fetchData = function(req, res) {
-    getDataSet().then( (data) => {
+    //maskers: termmaster13435
+    //foto's: termmaster1397
+    //kleding: termmaster13527
+
+    let uri = "termmaster13527"
+
+    getDataSet(uri).then( (data) => {
         let items = data.map (item => {
             // edited function from https://beta.vizhub.com/Razpudding/2e039bf6e39a421180741285a8f735a3?edit=files&file=index.js
 
@@ -16,7 +22,7 @@ dataController.fetchData = function(req, res) {
                     } else {
                         obj.Name = propValue.value
                     }
-            })
+            });
 
             return obj;
 
@@ -28,10 +34,10 @@ dataController.fetchData = function(req, res) {
     })
 }
 
-//maskers: https://hdl.handle.net/20.500.11840/termmaster13435
+function getDataSet (uri) {
+    const url ="https://api.data.netwerkdigitaalerfgoed.nl/datasets/ivo/NMVW/services/NMVW-34/sparql";
 
-function getDataSet () {
-    const url ="https://api.data.netwerkdigitaalerfgoed.nl/datasets/ivo/NMVW/services/NMVW-34/sparql"
+    const theSaurusUrl = `<https://hdl.handle.net/20.500.11840/${uri}>`;
 
     const query = `
     PREFIX dc: <http://purl.org/dc/elements/1.1/>
@@ -44,7 +50,7 @@ function getDataSet () {
     SELECT ?countryLabel
            (COUNT(?cho) AS ?choCount)
     WHERE {
-      <https://hdl.handle.net/20.500.11840/termmaster13527> skos:narrower* ?type .
+      ${theSaurusUrl} skos:narrower* ?type .
       ?cho edm:object ?type .
 
       ?cho dct:spatial ?place . # obj place
@@ -55,7 +61,7 @@ function getDataSet () {
     ORDER BY DESC(?choCount)
     `
 
-    return runQuery(url, query)
+    return runQuery(url, query);
 }
 
 function runQuery(url, query) {
@@ -63,7 +69,7 @@ function runQuery(url, query) {
     .then(res => res.json())
     .then(json => {
         return json.results.bindings;
-    })
+    });
 }
 
 module.exports = dataController;

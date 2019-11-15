@@ -31,12 +31,12 @@ function drawChart(data) {
 		children: data
 	};
 
-	let diameter = 600;
+	let diameter = 650;
 	let color = d3.scaleOrdinal(d3.schemeCategory20);
 
 	let bubble = d3.pack(dataset)
-					.size([diameter, diameter])
-					.padding(1.5);
+				   .size([diameter, diameter])
+				   .padding(2.5);
 
 	let svg = d3.select("body")
 				.append("svg")
@@ -45,7 +45,7 @@ function drawChart(data) {
 				.attr("class", "bubble");
 
 	let nodes = d3.hierarchy(dataset)
-					.sum(function(d) { return d.Amount; });
+				  .sum(function(d) { return d.Amount; });
 
 	let node = svg.selectAll(".node")
 					.data(bubble(nodes).descendants())
@@ -97,7 +97,7 @@ function drawChart(data) {
 		.attr("fill", "white");
 
 	d3.select(self.frameElement)
-		.style("height", diameter + "px");
+	  .style("height", diameter + "px");
 }
 
 </script>
