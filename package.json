@@ -30,7 +30,7 @@
     "gitmoji-cli": "^2.2.0",
     "gulp": "^4.0.2",
     "gulp-sass": "^4.0.2",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "nodemon": "^1.19.4"
   }
 }
